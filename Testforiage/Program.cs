@@ -14,77 +14,61 @@ namespace Testforiage
         static void Main(string[] args)
         {
 
-            //var company = File.Exists("Empl.json") ? JsonConvert.DeserializeObject<Employee>(File.ReadAllText("Empl.json")) : new Company
-            var company = new Company()
-            /*{
-                Id = new id 3,
-                FirstName = "Muhin",
-                LastName = "Evgeny",
-                SalaryPerHour = 101
-            };*/
-            {
-                employee = new List<Employee>()
+            //var employee = File.Exists("Empl.json") ? JsonConvert.DeserializeObject<Employee>(File.ReadAllText("Empl.json")) : new List<Employee>()
+            var employee = new List<Employee>()
                 {
                     new Employee {
                         ID=1,
                         FirstName = "qwe",
-                        LastName = "Я с инстаграммом",
+                        LastName = "Я",
                         SalaryPerHour = 123.5m
                     },
                     new Employee {
                         ID=2,
                         FirstName = "sdsa",
-                        LastName = "Я на фоне заниженного таза",
+                        LastName = "Я на",
                         SalaryPerHour = 121
                     }
-                }
-                
-            };
-            
+                };
+                            
+            File.WriteAllText("Empl.json", JsonConvert.SerializeObject(employee));
             Addempl();
             //
-            File.WriteAllText("Empl.json", JsonConvert.SerializeObject(company));
             
-           /* var jsonUser = JsonConvert.SerializeObject(user);
-
-            System.Console.Write(jsonUser);
-
-            var jsonSource = "{\"id\":404,\"name\":\"Andrey\",\"first_name\":\"Andrey\",\"middle_name\":\"Alexandrovich\",\"last_name\":\"Chernikov\",\"user_name\":\"rollinx\",\"gender\":\"M\",\"email\":\"chernikov@gmail.com\",\"photo_album\":[{\"id\":1,\"name\":\"Я с инстаграммом\"},{\"id\":2,\"name\":\"Я на фоне заниженного таза\"}]}";
-
-            var user2 = JsonConvert.DeserializeObject<User>(jsonSource);
-            System.Console.ReadLine();
-            string json = File.ReadAllText("Empl.json");
-            dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-            //jsonObj["Id"] = 3;
-            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-            File.WriteAllText("Empl.json", output);*/
-
-
-
-
-            /*Employee Empl = new Employee
-            {
-                Id = 1,
-                FirstName = "Muhin",
-                LastName= "Evgeny",
-                SalaryPerHour= 101
-            };
-            string jsondata = JsonConvert.SerializeObject(Employee);
-            var Employee2 = JsonConvert.DeserializeObject<Employee>(jsondata);*/
-
-
             Console.ReadKey();
             
         }
-        static void Addempl()
+        static void Addempl(string firstname="", string lastname="", decimal salaryph=0)
         {
-        
+
+            var filePath = "Empl.json";
+            // Read existing json data
+            var jsonData = System.IO.File.ReadAllText(filePath);
+            // De-serialize to object or create new list
+            var employeeList = JsonConvert.DeserializeObject<List<Employee>>(jsonData)
+                                  ?? new List<Employee>();
+
+            // Add any new employees
+            employeeList.Add(new Employee()
+            {
+                ID = 2,
+                FirstName = firstname,
+                LastName = lastname,
+                SalaryPerHour = salaryph
+            });           
+
+            // Update json data string
+            jsonData = JsonConvert.SerializeObject(employeeList);
+            System.IO.File.WriteAllText(filePath, jsonData);
+
         }
     }
 
-    
-    /* выдать запись работает
-            string Employee = JsonConvert.SerializeObject(employee, Formatting.Indented);
-            Console.WriteLine(Employee);
+    /* изменить запись работает
+            string json = File.ReadAllText("Empl.json");
+            dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+            jsonObj["employee"][0]["ID"] = 5;
+            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText("Empl.json", output);
             */
 }
